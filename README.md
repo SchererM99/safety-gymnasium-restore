@@ -43,6 +43,25 @@ If you find Safety-Gymnasium useful, please cite it in your publications.
 
 --------------------------------------------------------------------------------
 
+# Note for saving and restoring a state with this fork
+### Saving a state
+```python
+simulator_state = env.task.world.get_whole_state()
+seed = env.get_seed()
+# Get additional information, e.g.:
+cost = env.cost
+```
+
+### Restore a state
+```python
+env.reset(seed=seed)
+env.task.world.set_whole_state(simulator_state)
+# Set additional information, e.g.:
+env.cost = cost
+```
+
+Also when setting ```env.task.agent.locations = [[x_coordinate, y_coordinate]]``` before a reset, the agent's location will be set to the specified coordinates. (For initial state control)
+
 # Note for v1.1.0 and v1.2.0❗️❗️❗️
 
 We have updated the environments for both the Safe Vision series and the Safe Isaac Gym series. However, due to **package size constraints**, we have not yet uploaded versions **v1.1.0** and **v1.2.0** to PyPI. As a result, users are required to manually download and install. We currently recommend using GitHub's **Download zip** feature to obtain our package and access the latest environments. In the future, we plan to deploy resources separately to a cloud service to accommodate PyPI. Stay tuned for further updates.

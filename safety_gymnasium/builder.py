@@ -158,6 +158,10 @@ class Builder(gymnasium.Env, gymnasium.utils.EzPickle):
         self._seed = np.random.randint(2**32, dtype='int64') if seed is None else seed
         self.task.random_generator.set_random_seed(self._seed)
 
+    def get_seed(self) -> int:
+        """Get the seed of the environment."""
+        return self._seed
+
     def reset(
         self,
         *,
