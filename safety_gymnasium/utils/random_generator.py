@@ -140,8 +140,12 @@ class RandomGenerator:
                     return False
             return True
 
-        layout = {}
+        # In case the agent positon is specified in the underlying.py, then we already have a layout
+        layout = {} if self.layout is None else self.layout
         for name, (placements, keepout) in self.placements.items():
+            # If the name is already in the layout, then we skip it (for agent starting position)
+            if name in layout:
+                continue
             conflicted = True
             for _ in range(100):
                 # pylint: disable-next=invalid-name

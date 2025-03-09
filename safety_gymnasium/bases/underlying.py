@@ -307,12 +307,23 @@ class Underlying(abc.ABC):  # pylint: disable=too-many-instance-attributes
                 self.placements_conf.extents,
                 self.placements_conf.margin,
             )
-        # Sample object positions
+
+        # Sample object positions, and if the agent has a location, put it at that location first, then sample the rest
+        if self.agent.locations:
+            self.random_generator.layout = {"agent": np.array(self.agent.locations[0])}
+
         self.world_info.layout = self.random_generator.build_layout()
 
-        # Set Agent position and Agent rotation if specified beforehand
-        if self.agent.locations:
-            self.world_info.layout["agent"] = np.array(self.agent.locations[0])
+        # Set Agent position if specified beforehand (Not needed, is set before now)
+        # if self.agent.locations:
+            # self.world_info.layout["agent"] = np.array(self.agent.locations[0])
+        # In case of reset we give the whole layout, but we need it here so the random_generator has a layout for the
+        # goal position later
+        custom_layout = self.custom_layout if hasattr(self, 'custom_layout') else None
+        if custom_layout:
+            self.world_info.layout.clear()
+            self.world_info.layout.update(custom_layout)
+            self.custom_layout = None
 
         # Build the underlying physics world
         self.world_info.world_config_dict = self._build_world_config(self.world_info.layout)

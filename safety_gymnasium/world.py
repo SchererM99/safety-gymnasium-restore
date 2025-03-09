@@ -481,16 +481,9 @@ class World:  # pylint: disable=too-many-instance-attributes
             'time': np.copy(self.data.time),
             'qpos': np.copy(self.data.qpos),
             'qvel': np.copy(self.data.qvel),
-            'act': np.copy(self.data.act),
+            'act': np.copy(self.data.act) if self.model.na != 0 else None,
             'qacc_warmstart': np.copy(self.data.qacc_warmstart),
             'ctrl': np.copy(self.data.ctrl),
-            'qfrc_applied': np.copy(self.data.qfrc_applied),
-            'xfrc_applied': np.copy(self.data.xfrc_applied),
-            # 'eq_active': np.copy(self.data.eq_active),  # Exists not in data, but in model. Enables/disables constraints
-            'mocap_pos': np.copy(self.data.mocap_pos),
-            'mocap_quat': np.copy(self.data.mocap_quat),
-            'userdata': np.copy(self.data.userdata),
-            'plugin': np.copy(self.data.plugin),
         }
         return state
 
@@ -499,16 +492,10 @@ class World:  # pylint: disable=too-many-instance-attributes
         self.data.time = state['time']
         self.data.qpos[:] = np.copy(state['qpos'])
         self.data.qvel[:] = np.copy(state['qvel'])
-        self.data.act[:] = np.copy(state['act'])
+        if self.model.na != 0:
+            self.data.act[:] = np.copy(state['act'])
         self.data.qacc_warmstart[:] = np.copy(state['qacc_warmstart'])
         self.data.ctrl[:] = np.copy(state['ctrl'])
-        self.data.qfrc_applied[:] = np.copy(state['qfrc_applied'])
-        self.data.xfrc_applied[:] = np.copy(state['xfrc_applied'])
-        # self.data.eq_active[:] = np.copy(state['eq_active'])
-        self.data.mocap_pos[:] = np.copy(state['mocap_pos'])
-        self.data.mocap_quat[:] = np.copy(state['mocap_quat'])
-        self.data.userdata[:] = np.copy(state['userdata'])
-        self.data.plugin[:] = np.copy(state['plugin'])
 
     @property
     def model(self):

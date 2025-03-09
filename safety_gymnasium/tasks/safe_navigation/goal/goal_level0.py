@@ -51,6 +51,11 @@ class GoalLevel0(BaseTask):
 
     def update_world(self):
         """Build a new goal position, maybe with resampling due to hazards."""
+        # In case of state restoration we don't want to build a new goal on reset
+        if hasattr(self, "skip_new_goal"):
+            if self.skip_new_goal:
+                self.skip_new_goal = False
+                return
         self.build_goal_position()
         self.last_dist_goal = self.dist_goal()
 
